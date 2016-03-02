@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Hello World!</title>
+        <link rel="stylesheet" href="stylesheets/milligram.min.css" />
+    </head>
+    <body>
+        <h1>Hello World!</h1>
+        We are using node <script>document.write(process.versions.node)</script>,
+        Chrome <script>document.write(process.versions.chrome)</script>,
+        and Electron <script>document.write(process.versions.electron)</script>.
+
+        <script>
+        // Toggle dev tools on F12
+        var remote = require('remote');           
+        document.addEventListener("keydown", function (e) {  
+            if (e.keyCode === 123) { // F12
+                var window = remote.getCurrentWindow();
+                window.toggleDevTools();         
+            }
+        });
+        </script>
+
+        <script type="text/javascript" src="javascripts/blackjack.js" ></script>
+
+        <script type="text/javascript">
+        var card = new Card("diamond", "2");
+
+        console.log(card);
+        </script>
+    </body>
+</html>
