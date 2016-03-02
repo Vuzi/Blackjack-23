@@ -2,16 +2,62 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Hello World!</title>
+        <title>Blackjack 23 - Tests</title>
+
+        <!-- Style -->
+        <!-- Google Fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+
+        <!-- CSS Reset -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+
+        <!-- Milligram CSS minified -->
         <link rel="stylesheet" href="stylesheets/milligram.min.css" />
+
+        <!-- JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+        <style type="text/css">
+            .cards , .cards {
+                text-align: center;
+                width: 100%;
+            }
+
+            .card {
+                display: inline-block;
+            }
+
+            .player-controls {
+                text-align: center;
+            }
+        </style>
     </head>
     <body>
-        <h1>Hello World!</h1>
-        We are using node <script>document.write(process.versions.node)</script>,
-        Chrome <script>document.write(process.versions.chrome)</script>,
-        and Electron <script>document.write(process.versions.electron)</script>.
+        <div id="content"></div>
+
+        <!-- Dealer cards
+        <h3>Dealer's cards</h3>
+        <div class="dealer-cards column">
+        </div>
+
+        Player cards
+        <h3>Player's cards</h3>
+        <div class="player-cards column">
+        </div>
+
+        <div class="player-controls column">
+            <input type="button" id="hit" value="Hit">
+            <input type="button" id="stand" value="Stand">
+        </div>
+        -->
 
         <script>
+        // JQuery
+        window.$ = window.jQuery = require('./javascripts/jquery-2.2.1.min.js');
+
         // Toggle dev tools on F12
         var remote = require('remote');           
         document.addEventListener("keydown", function (e) {  
@@ -23,11 +69,168 @@
         </script>
 
         <script type="text/javascript" src="javascripts/cards.js" ></script>
+        <script type="text/javascript" src="javascripts/game.js" ></script>
+        <script type="text/babel">
+            // Card factory, used to configure how card image are generated
+            class CardImageGenerator {
+                constructor(image, cardWidth, cardHeight, lineOrder) {
+                    this.image = image;
+                    this.cardWidth = cardWidth;
+                    this.cardHeight = cardHeight;
+                    this.lineOrder = lineOrder || cardTypes;
+                }
 
-        <script type="text/javascript">
-        var card = new Card("diamond", "2");
+                getImageFor(card) {
+                    var xPos = this.lineOrder.indexOf(card.type) * this.cardHeight;
+                    var yPos = cardFigures.indexOf(card.figure) * this.cardWidth;
 
-        console.log(new Deck());
+                    var cardStyle = {
+                      backgroundImage: 'url(' + this.image + ')',
+                      backgroundPosition: '-' + yPos + 'px -' + xPos + 'px',
+                      width : this.cardWidth,
+                      height : this.cardHeight
+                    };
+
+                    return (
+                        <div className="card" style={cardStyle} />
+                    );
+                }
+            }
+            
+            // Image generator for temp image
+            var cardImageGenerator = new CardImageGenerator('images/cards.jpg', 225, 315, ['heart', 'spade', 'diamond', 'club']);
+
+            // For now use this simple deck
+            var deck = new Deck();
+
+            // Image of a card, based on a card value, using the card image factory
+            var CardImage = React.createClass({
+                render: function() {
+                    return cardImageGenerator.getImageFor(this.props.card);
+                }
+            });
+
+            // Hand of card
+            var CardHand = React.createClass({
+                render: function() {
+                    var cardImages = this.props.cards.map((card) => {
+                        return (
+                            <CardImage card={card} key={card.type + card.figure} />
+                        );
+                    });
+
+                    return (
+                        <div className="cards">
+                            {cardImages}
+                        </div>
+                    );
+                }
+            });
+
+            // Hand of card
+            var PlayerZone = React.createClass({
+                getInitialState: function() {
+                    // New player
+                    return { player : new Player(100) };
+                },
+
+                // Ask for a new card
+                hit() {
+                    var player = this.state.player;
+                    player.hand.push(deck.getCard());
+
+                    console.log("hit()");
+
+                    // Update
+                    this.setState({ player : player });
+                },
+
+                stand() {
+                    console.log("stand()");
+
+                    // Update
+                    // this.setState({ player : player });
+                },
+
+                render: function() {
+                    return (
+                        <div>
+                            <h3>Player's cards</h3>
+                            <CardHand className="player-cards column" cards={this.state.player.hand} />
+                            <div className="player-controls column">
+                                <input type="button" value="Hit" onClick={this.hit} />
+                                <input type="button" value="Stand" onClick={this.stand}/>
+                            </div>
+                        </div>
+                    );
+                }
+            });
+
+            // Test game engine
+            //var deck = new Deck();
+            //var player = new Player(100);
+
+            ReactDOM.render(
+                <div id="container">
+                    <h3>Dealer's cards</h3>
+                    <CardHand className="dealer-cards column" cards={[]} />
+                    <PlayerZone />
+                </div>,
+                document.getElementById('content')
+            );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+            cardImageGenerator.getImageFor(new Card("diamond", "2")).appendTo('.dealer-cards');
+            cardImageGenerator.getImageFor(new Card("diamond", "K")).appendTo('.dealer-cards');
+
+            // Renderer
+            
+            var dealerCardsRenderer = $('.dealer-cards');
+            var playerCardsRenderer = $('.player-cards');
+            var standButton = $('#stand');
+            var hitButton = $('#hit');
+
+            // Test game engine
+            var deck = new Deck();
+            var player = new Player(100);
+
+            standButton.on('click', () => {
+                
+            });
+
+            hitButton.on('click', () => {
+                var card = deck.getCard();
+
+                playerCardsRenderer.append(cardImageGenerator.getImageFor(card));
+
+                player.hand
+            });*/
+
+            /*
+            var card = new Card("diamond", "2");
+
+            console.log(new Deck());*/
         </script>
     </body>
 </html>
