@@ -13,50 +13,53 @@
 
         <!-- Milligram CSS minified -->
         <link rel="stylesheet" href="stylesheets/milligram.min.css" />
+        <link rel="stylesheet" href="stylesheets/alertify.css" />
 
         <!-- JS -->
+        <script src="javascripts/alertify.js"></script>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
         <style type="text/css">
-            .cards , .cards {
+            #content {
+                padding: 30px;
+                padding-left: 60px;
+            }
+
+            .cards {
                 text-align: center;
                 width: 100%;
             }
 
+            @keyframes cardAnimation {
+                0%   { transform: rotateX(0deg) rotateY(90deg)  rotateZ(0deg); }
+                100% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            }
+
             .card {
+                animation-name: cardAnimation;
+                animation-duration: 0.5s;
                 display: inline-block;
             }
 
             .player-controls {
                 text-align: center;
             }
+
+            .player-controls input {
+                margin: 5px;
+            }
         </style>
     </head>
     <body>
         <div id="content"></div>
 
-        <!-- Dealer cards
-        <h3>Dealer's cards</h3>
-        <div class="dealer-cards column">
-        </div>
-
-        Player cards
-        <h3>Player's cards</h3>
-        <div class="player-cards column">
-        </div>
-
-        <div class="player-controls column">
-            <input type="button" id="hit" value="Hit">
-            <input type="button" id="stand" value="Stand">
-        </div>
-        -->
-
         <script>
-        // JQuery
         window.$ = window.jQuery = require('./javascripts/jquery-2.2.1.min.js');
+        window.alertify = require('./javascripts/alertify.js');
 
         // Toggle dev tools on F12
         var remote = require('remote');           
@@ -71,6 +74,40 @@
         <script type="text/javascript" src="javascripts/cards.js" ></script>
         <script type="text/javascript" src="javascripts/game.js" ></script>
         <script type="text/babel">
+
+            // Create the game engine
+            const deck = new Deck();
+            const player = new Player(100);
+
+            const game = new Game(deck, [player]);
+
+            /*
+            // Exemple game
+            
+            console.log("New turn");
+            game.nextTurn();
+
+            console.log(game.players[0].hand);
+
+            console.log("Dealer : ");
+            console.log(game.dealer.hand);
+            console.log(game.dealer.getScore());
+
+            game.playerDraw(0);
+
+            console.log("Hand : ");
+            console.log(game.players[0].hand);
+            console.log(game.players[0].getScore());
+
+            game.dealerDraw();
+
+            console.log("Dealer : ");
+            console.log(game.dealer.hand);
+            console.log(game.dealer.getScore());
+
+            console.log(game.endTurn());*/
+    
+
             // Card factory, used to configure how card image are generated
             class CardImageGenerator {
                 constructor(image, cardWidth, cardHeight, lineOrder) {
@@ -97,11 +134,8 @@
                 }
             }
             
-            // Image generator for temp image
-            var cardImageGenerator = new CardImageGenerator('images/cards.jpg', 225, 315, ['heart', 'spade', 'diamond', 'club']);
-
-            // For now use this simple deck
-            var deck = new Deck();
+            // Image generator for card image
+            const cardImageGenerator = new CardImageGenerator('images/cards.jpg', 225, 315, ['heart', 'spade', 'diamond', 'club']);
 
             // Image of a card, based on a card value, using the card image factory
             var CardImage = React.createClass({
@@ -127,110 +161,144 @@
                 }
             });
 
-            // Hand of card
+            // Player zone
             var PlayerZone = React.createClass({
                 getInitialState: function() {
-                    // New player
-                    return { player : new Player(100) };
+                    return { player : this.props.player };
                 },
 
                 // Ask for a new card
                 hit() {
-                    var player = this.state.player;
-                    player.hand.push(deck.getCard());
-
-                    console.log("hit()");
+                    let player = this.state.player;
+                    game.playerDraw(0);
 
                     // Update
-                    this.setState({ player : player });
+                    this.forceUpdate();
+
+                    if(player.isBusted()) {
+                        alertify.logPosition("bottom left");
+                        alertify.delay(2000);
+                        alertify.log("Broken with " + player.getScore());
+
+                        setTimeout(() => {
+                            this.stand();
+                        }, 2000);
+                    }
                 },
 
+                // Pass
                 stand() {
-                    console.log("stand()");
+                    var player = this.state.player;
+                    player.stand = true;
+
+                    // Callback
+                    this.props.onStand();
+                },
+
+                render: function() {
+                    const player = this.state.player;
+
+                    if(this.props.type === 'dealer') {
+                        var score = player.stand ? player.getScore() : player.hand[0].value;
+                        var cards = player.stand ? player.hand : [player.hand[0]];
+
+                        if(score == 1)
+                            score = 11;
+
+                        return (
+                            <div>
+                                <h3>Dealer's cards ({score}) {player.isBusted() ? " - broken !": ""}</h3>
+                                <CardHand
+                                    className="player-cards column"
+                                    cards={cards} />
+                            </div>
+                        );
+                    } else {
+                        return (
+                            <div>
+                                <h3>Player's cards ({player.getScore()}) {player.isBusted() ? " - broken !": ""}</h3>
+                                <CardHand
+                                    className="player-cards column"
+                                    cards={this.state.player.hand} />
+                                    <div className="player-controls column">
+                                        <input
+                                            type="button"
+                                            disabled={player.canHit() && !player.stand ? "" : "disabled"}
+                                            value="Hit"
+                                            onClick={this.hit} />
+                                        <input
+                                            type="button"
+                                            className="button-outline"
+                                            disabled={!player.stand ? "" : "disabled"}
+                                            value="Stand"
+                                            onClick={this.stand}/>
+                                    </div>
+                            </div>
+                        );
+                    }
+                }
+            });
+            
+            // Blackjack table
+            var BlackjackTable = React.createClass({
+                getInitialState: function() {
+                    // New game
+                    return { game : game };
+                },
+
+                nextTurn: function() {
+                    // Make the dealer draw cards
+                    this.state.game.dealerDraw();
+
+                    // End the turn
+                    var results = this.state.game.endTurn();
 
                     // Update
-                    // this.setState({ player : player });
+                    this.forceUpdate();
+
+                    // Alert the user
+                    alertify.logPosition("bottom left");
+                    alertify.delay(2000);
+                    if(results[0] == "won") {
+                        alertify.log("You won :)");
+                    } else if (results[0] == "lost") {
+                        alertify.log("You lost :(");
+                    } else {
+                        alertify.log("Equality :S");
+                    }
+
+                    setTimeout(() => {
+                        this.state.game.nextTurn();
+                        this.forceUpdate();
+                    }.bind(this), 2500);
                 },
 
                 render: function() {
                     return (
                         <div>
-                            <h3>Player's cards</h3>
-                            <CardHand className="player-cards column" cards={this.state.player.hand} />
-                            <div className="player-controls column">
-                                <input type="button" value="Hit" onClick={this.hit} />
-                                <input type="button" value="Stand" onClick={this.stand}/>
-                            </div>
+                            <PlayerZone
+                                type="dealer"
+                                player={this.state.game.dealer} />
+                            <PlayerZone
+                                type="player"
+                                player={this.state.game.players[0]}
+                                onStand={() => this.nextTurn()} />
                         </div>
                     );
                 }
             });
 
-            // Test game engine
-            //var deck = new Deck();
-            //var player = new Player(100);
+            // First turn
+            game.nextTurn();
 
+            // Test game engine
             ReactDOM.render(
                 <div id="container">
-                    <h3>Dealer's cards</h3>
-                    <CardHand className="dealer-cards column" cards={[]} />
-                    <PlayerZone />
+                    <BlackjackTable />
                 </div>,
                 document.getElementById('content')
             );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-            cardImageGenerator.getImageFor(new Card("diamond", "2")).appendTo('.dealer-cards');
-            cardImageGenerator.getImageFor(new Card("diamond", "K")).appendTo('.dealer-cards');
-
-            // Renderer
-            
-            var dealerCardsRenderer = $('.dealer-cards');
-            var playerCardsRenderer = $('.player-cards');
-            var standButton = $('#stand');
-            var hitButton = $('#hit');
-
-            // Test game engine
-            var deck = new Deck();
-            var player = new Player(100);
-
-            standButton.on('click', () => {
-                
-            });
-
-            hitButton.on('click', () => {
-                var card = deck.getCard();
-
-                playerCardsRenderer.append(cardImageGenerator.getImageFor(card));
-
-                player.hand
-            });*/
-
-            /*
-            var card = new Card("diamond", "2");
-
-            console.log(new Deck());*/
         </script>
     </body>
 </html>

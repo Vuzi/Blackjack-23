@@ -21,10 +21,10 @@ class Card {
 		this.figure = figure;
 	}
 
-	value() {
+	get value() {
         var i = cardFigures.indexOf(this.figure);
 
-	    else if(i < 10) // Value
+	    if(i < 10) // Value
 	        return i + 1;
 	    else // Figure
 	        return 10
