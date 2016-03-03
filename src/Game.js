@@ -38,13 +38,13 @@ export default class Game {
         this.players.forEach((player) => {
             // Reset hand
             player.stand = false;
-        player.hand = [];
-        player.bet = 0;
+            player.hand = [];
+            player.bet = 0;
 
-        // Give 2 cards
-        for(var i = 0; i < 2; i++)
-            player.hand.push(this.deck.getCard());
-    })
+            // Give 2 cards
+            for(var i = 0; i < 2; i++)
+                player.hand.push(this.deck.getCard());
+        })
 
         // Reset dealer
         this.dealer.stand = false;

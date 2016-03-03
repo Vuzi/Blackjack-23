@@ -59,7 +59,6 @@ var PlayerZone = React.createClass({
                 <div>
                     <h3>Player's cards ({player.getScore()}) {player.isBusted() ? " - broken !": ""}</h3>
                     <h4>Credits: {player.credits}</h4>
-                    <h4>Mise: {player.credits}</h4>
                     <CardHand
                         className="player-cards column"
                         cards={this.state.player.hand} />

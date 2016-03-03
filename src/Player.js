@@ -1,5 +1,5 @@
 
-var numberOfElement = function(array, value){
+export function numberOfElement(array, value){
     var nb = 0;
     for(var val in array){
         if(array[val].value() == value)
@@ -8,8 +8,7 @@ var numberOfElement = function(array, value){
     return nb;
 };
 
-var addCards = function(start, end, array, array2){
-
+export function addCards(start, end, array, array2){
     for(var i = start; i < end; i++){
         array2.push(array[i]);
     }
@@ -31,13 +30,12 @@ export default class Player {
     getScore() {
         // Get the number of spade and of the score of regular cards
         let scoreTmp = this.hand.reduce((acc, card) => {
-                let val = card.value;
-
-        if(val == 1)
-            return [acc[0] + 1, acc[1]];
-        else
-            return [acc[0], acc[1] + val];
-    }, [0, 0]);
+            let val = card.value;
+            if(val == 1)
+                return [acc[0] + 1, acc[1]];
+            else
+                return [acc[0], acc[1] + val];
+        }, [0, 0]);
 
         var score = null;
 

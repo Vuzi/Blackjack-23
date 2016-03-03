@@ -4,13 +4,11 @@
         <meta charset="UTF-8">
         <title>Blackjack 23 - Tests</title>
         <!-- CSS Reset -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+        <link rel="stylesheet" href="stylesheets/normalize.css">
         <!-- Milligram CSS minified -->
         <link rel="stylesheet" href="stylesheets/milligram.min.css" />
         <!-- Google Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-        <!-- JQuery -->
-        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 
         <!-- Style -->
         <style type="text/css">
@@ -70,17 +68,12 @@
     </head>
     <body>
         <div id="content"></div>
-
         <script>
-            window.$ = window.jQuery = require('./javascript/jquery-2.2.1.min.js');
-            window.alertify = require('./javascript/alertify.js');
-
             // Toggle dev tools on F12
             var remote = require('remote');           
             document.addEventListener("keydown", function (e) {  
                 if (e.keyCode === 123) { // F12
                     var window = remote.getCurrentWindow();
-                    window.toggleDevTools();         
                 }
             });
         </script>
@@ -94,9 +87,9 @@
             <!-- Partie normale -->
             <button onclick="normalGame()">Start a game</button></br></br>
             <!-- Partie multijoueur -->
-            <button onclick="notAvailable()">Multiplayer Mode</button></br></br>
+            <button disabled="disabled">Multiplayer Mode</button></br></br>
             <!-- Mode didactitiel -->
-            <button onclick="notAvailable()">Tutorial Mode</button></br></br>
+            <button disabled="disabled">Tutorial Mode</button></br></br>
 
             <a href="#" data-width="800" data-rel="popup_name" class="poplight">Blackjack's rules</a>
 
@@ -114,10 +107,11 @@
                 </ul>
             </div>
         </div>
-
+        <!-- JQuery -->
+        <script src="jquery-1.12.1.min.js"></script>
         <script>
-            jQuery(function($){
-                                               
+            window.$ = window.jQuery = require('./jquery-1.12.1.min.js');
+            $( document ).ready(function() {
                 //Lorsque vous cliquez sur un lien de la classe poplight
                 $('a.poplight').on('click', function() {
                     var popID = $(this).data('rel'); //Trouver la pop-up correspondante
@@ -152,18 +146,9 @@
                     
                     return false;
                 });
-
-                
             });
-
             function normalGame() {
                 window.location.replace("index.html");
-            }
-
-            function notAvailable() {
-                alertify.logPosition("bottom left");
-                alertify.delay(3000);
-                alertify.log("Coming Soon");
             }
         </script>
     </body>
