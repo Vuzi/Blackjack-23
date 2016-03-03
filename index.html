@@ -12,12 +12,10 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
 
         <!-- Milligram CSS minified -->
-        <link rel="stylesheet" href="stylesheets/milligram.min.css" />
-        <link rel="stylesheet" href="stylesheets/alertify.css" />
+        <link rel="stylesheet" href="stylesheet/milligram.min.css" />
+        <link rel="stylesheet" href="stylesheet/alertify.css" />
 
         <!-- JS -->
-        <script src="javascripts/alertify.js"></script>
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
@@ -58,21 +56,21 @@
         <div id="content"></div>
 
         <script>
-        window.$ = window.jQuery = require('./javascripts/jquery-2.2.1.min.js');
-        window.alertify = require('./javascripts/alertify.js');
+            window.$ = window.jQuery = require('./javascript/jquery-2.2.1.min.js');
+            window.alertify = require('./javascript/alertify.js');
 
-        // Toggle dev tools on F12
-        var remote = require('remote');           
-        document.addEventListener("keydown", function (e) {  
-            if (e.keyCode === 123) { // F12
-                var window = remote.getCurrentWindow();
-                window.toggleDevTools();         
-            }
-        });
+            // Toggle dev tools on F12
+            var remote = require('remote');           
+            document.addEventListener("keydown", function (e) {  
+                if (e.keyCode === 123) { // F12
+                    var window = remote.getCurrentWindow();
+                    window.toggleDevTools();         
+                }
+            });
         </script>
 
-        <script type="text/javascript" src="javascripts/cards.js" ></script>
-        <script type="text/javascript" src="javascripts/game.js" ></script>
+        <script type="text/javascript" src="javascript/cards.js" ></script>
+        <script type="text/javascript" src="javascript/game.js" ></script>
         <script type="text/babel">
 
             // Create the game engine
