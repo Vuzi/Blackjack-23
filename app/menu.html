@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Blackjack 23 - Tests</title>
+        <!-- CSS Reset -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+        <!-- Milligram CSS minified -->
+        <link rel="stylesheet" href="stylesheets/milligram.min.css" />
+        <!-- Google Fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+
+        <!-- Style -->
+        <style type="text/css">
+            #content {
+                padding: 30px;
+                padding-left: 60px;
+            }
+
+            .cards {
+                text-align: center;
+                width: 100%;
+            }
+
+            @keyframes cardAnimation {
+                0%   { transform: rotateX(0deg) rotateY(90deg)  rotateZ(0deg); }
+                100% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            }
+
+            .card {
+                animation-name: cardAnimation;
+                animation-duration: 0.5s;
+                display: inline-block;
+            }
+
+            .player-controls {
+                text-align: center;
+            }
+
+            .player-controls input {
+                margin: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="content"></div>
+
+        <script>
+            window.$ = window.jQuery = require('./javascript/jquery-2.2.1.min.js');
+            window.alertify = require('./javascript/alertify.js');
+
+            // Toggle dev tools on F12
+            var remote = require('remote');           
+            document.addEventListener("keydown", function (e) {  
+                if (e.keyCode === 123) { // F12
+                    var window = remote.getCurrentWindow();
+                    window.toggleDevTools();         
+                }
+            });
+        </script>
+
+        <div style="text-align:center;">
+
+            <h3 id="title">Blackjack 23 - Welcome</h3>
+        
+            <button onclick="normalGame()">Launch a game</button></br></br>
+            <button onclick="notAvailable()">Multiplayer game</button>
+        </div>
+
+        <script>
+            function normalGame() {
+                window.location.replace("index.html");
+            }
+
+            function notAvailable() {
+                alertify.logPosition("bottom left");
+                alertify.delay(3000);
+                alertify.log("Coming Soon");
+            }
+        </script>
+    </body>
+</html>
