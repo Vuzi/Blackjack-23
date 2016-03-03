@@ -1,4 +1,5 @@
 import React from "react";
+
 import CardImageGenerator from "./CardImageGenerator";
 
 // Image generator for card image

@@ -1,82 +1,94 @@
 import React from "react";
+
 import CardHand from "./CardHand";
 
 // Player zone
 var PlayerZone = React.createClass({
     displayName: "PlayerZone",
 
-    getInitialState: function() {
-        return { player : this.props.player };
+    getInitialState() {
+        return { hasBet : this.props.hasBet || false, bet : 10 };
     },
 
-    // Ask for a new card
-    hit() {
-        let { game, notification } = this.props;
-        
-        let player = this.state.player;
-        game.playerDraw(0);
+    changeBet(e) {
+        let value = parseInt(e.target.value);
 
-        // Update
-        this.forceUpdate();
-
-        if(player.isBusted()) {
-            notification("Broken with " + player.getScore(0));
-            setTimeout(() => {
-                this.stand();
-            }, 2000);
-        }
+        if(!isNaN(value))
+            this.setBet(value);
+        else
+            this.setState({ bet : this.state.bet });
     },
 
-    // Pass
-    stand() {
-        var player = this.state.player;
-        player.stand = true;
+    incBet(e) {
+        this.setBet(this.state.bet + 10);
+    },
 
-        // Callback
+    decBet(e) {
+        this.setBet(this.state.bet - 10);
+    },
+
+    setBet(bet) {
+        let player = this.props.player;
+
+        if(bet > player.credits)
+            bet = player.credits;
+        else if(bet < 0)
+            bet = 0;
+
+        this.setState({ bet : bet });
+    },
+
+    validateBet(e) {
+        this.setState({ hasBet : true });
+        this.props.onBet();
+    },
+
+    onStand() {
+        // Revert : no bet done
+        setTimeout(() => {
+            this.setState({ hasBet : false });
+        }, 2000);
+
+        // Call the previous action
         this.props.onStand();
     },
-
+    
     render: function() {
-        const player = this.state.player;
+        const {game, player} = this.props;
 
-        if(this.props.type === 'dealer') {
-            var score = player.stand ? player.getScore(0) : player.hands[0][0].value;
-            var cards = player.stand ? player.hand : [player.hands[0][0]];
-
-            if(score == 1)
-                score = 11;
-
+        // Get all the player hands
+        const hands = player.hands.map((hand) => {
             return (
-                <div>
-                    <h3>Dealer's cards ({score}) {player.isBusted() ? " - broken !": ""}</h3>
-                    <CardHand
-                        className="player-cards column"
-                        cards={cards} />
-                </div>
+                <CardHand
+                    className="player-cards column"
+                    {...this.props}
+                    onStand={this.onStand}
+                    hand={hand}
+                />
             );
-        } else {
-            return (
-                <div>
-                    <h3>Player's cards ({player.getScore(0)}) {player.isBusted() ? " - broken !": ""}</h3>
-                    <CardHand
-                        className="player-cards column"
-                        cards={this.state.player.hands[0]} />
-                        <div className="player-controls column">
-                            <input
-                                type="button"
-                                disabled={player.canHit() && !player.stand ? "" : "disabled"}
-                                value="Hit"
-                                onClick={this.hit} />
-                            <input
-                                type="button"
-                                className="button-outline"
-                                disabled={!player.stand ? "" : "disabled"}
-                                value="Stand"
-                                onClick={this.stand}/>
+        });
+
+        return (
+            <div>
+                <h3>Player's cards</h3>
+                {this.state.hasBet || this.props.type === 'dealer' ? (
+                    <div>
+                        {hands}
+                    </div>
+                ) : (
+                    <div className="bet">
+                        <div className="row">
+                            <input type="button" className="button-small button-outline" onClick={this.decBet} value="-" />
+                            <input type="text" value={this.state.bet} onChange={this.changeBet} />
+                            <input type="button" className="button-small button-outline" onClick={this.incBet} value="+" />
                         </div>
-                </div>
-            );
-        }
+                        <div className="row">
+                            <input type="button" className="button-small button" value="Place bet" onClick={this.validateBet} />
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
     }
 });
 

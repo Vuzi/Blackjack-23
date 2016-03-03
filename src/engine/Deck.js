@@ -9,10 +9,10 @@ export default class Deck {
     constructor() {
         // Generate each possible card
         this.cards = cardTypes.reduce((acc, type) => {
-                return acc.concat(cardFigures.map((figure) => {
-                        return new Card(type, figure);
-    }));
-    }, []);
+            return acc.concat(cardFigures.map((figure) => {
+                return new Card(type, figure);
+            }));
+        }, []);
 
         // Shuffle cards
         this._shuffle();

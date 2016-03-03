@@ -1,5 +1,6 @@
 import React from "react";
-import { cardFigures } from "./Card";
+
+import { cardFigures } from "./engine/Card";
 
 //Card factory, used to configure how card image are generated
 export default class CardImageGenerator {
