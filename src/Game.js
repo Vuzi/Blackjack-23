@@ -2,6 +2,23 @@
 
 import Player from "./Player";
 
+var numberOfElement = function(array, value){
+    var nb = 0;
+    for(var val in array){
+        if(array[val].value() == value)
+            nb++;
+    }
+    return nb;
+};
+
+var addCards = function(start, end, array, array2){
+
+    for(var i = start; i < end; i++){
+        array2.push(array[i]);
+    }
+    return array2;
+};
+
 /**
  * Game engine
  */
