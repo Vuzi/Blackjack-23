@@ -6,7 +6,7 @@ import Game from "./Game";
 import { NotificationStack } from 'react-notification';
 import { Container } from "flux/utils";
 import AppStore from "./AppStore";
-import { addNotification, deleteNotification } from "./Actions";
+import { nextTurn, addNotification, deleteNotification } from "./Actions";
 
 class BlackjackTable extends Component {
     static getStores() {
@@ -41,7 +41,7 @@ class BlackjackTable extends Component {
             addNotification("Equality :S");
 
         setTimeout(() => {
-            this.state.game.nextTurn();
+            nextTurn();
             this.forceUpdate();
         }, 2500);
     }
@@ -70,7 +70,7 @@ class BlackjackTable extends Component {
     }
 
     componentWillMount () {
-
+        nextTurn();
     }
 }
 

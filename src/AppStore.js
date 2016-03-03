@@ -1,6 +1,10 @@
 import { ReduceStore } from "flux/utils";
 import AppDispatcher from "./AppDispatcher";
-import { ADD_NOTIFICATION, DELETE_NOTIFICATION } from "./Actions";
+import {
+    ADD_NOTIFICATION,
+    DELETE_NOTIFICATION,
+    NEXT_TURN
+} from "./Actions";
 import Deck from "./Deck";
 import Player from "./Player";
 import Game from "./Game";
@@ -10,7 +14,6 @@ class AppStore extends ReduceStore {
         const deck = new Deck();
         const player = new Player(100);
         const game = new Game(deck, [player]);
-        game.nextTurn();
         return {
             player: player,
             deck: deck,
@@ -22,6 +25,9 @@ class AppStore extends ReduceStore {
     reduce(state, action) {
         console.log("AppStore", action.type, state, action);
         switch (action.type) {
+            case NEXT_TURN:
+                state.game.nextTurn();
+                return state;
             case ADD_NOTIFICATION:
                 state.notifications.push({
                     message: action.value,
