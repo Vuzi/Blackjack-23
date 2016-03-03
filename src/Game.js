@@ -38,28 +38,28 @@ export default class Game {
         this.players.forEach((player) => {
             // Reset hand
             player.stand = false;
-        player.hand = [];
+        player.hands = [ [] ];
         player.bet = 0;
 
         // Give 2 cards
         for(var i = 0; i < 2; i++)
-            player.hand.push(this.deck.getCard());
+            player.hands[0].push(this.deck.getCard());
     })
 
         // Reset dealer
         this.dealer.stand = false;
-        this.dealer.hand = [];
+        this.dealer.hands = [ [] ];
 
         // Give 2 cards
         for(var i = 0; i < 2; i++)
-            this.dealer.hand.push(this.deck.getCard());
+            this.dealer.hands[0].push(this.deck.getCard());
     }
 
     /**
      * Make the specified player draw a card from the game's deck, and return the score
      */
     playerDraw(playerIndex) {
-        this.players[playerIndex].hand.push(this.deck.getCard());
+        this.players[playerIndex].hands[0].push(this.deck.getCard());
         if (this.players[playerIndex].isBusted())
             this.players[playerIndex].stand = true;
     }
@@ -70,7 +70,7 @@ export default class Game {
     dealerDraw() {
         // The dealer need to get card until 17
         while(this.dealer.getScore() < 17)
-            this.dealer.hand.push(this.deck.getCard());
+            this.dealer.hands[0].push(this.deck.getCard());
 
         this.dealer.stand = true;
     }

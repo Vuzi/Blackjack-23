@@ -20,7 +20,7 @@ var PlayerZone = React.createClass({
         this.forceUpdate();
 
         if(player.isBusted()) {
-            notification("Broken with " + player.getScore());
+            notification("Broken with " + player.getScore(0));
             setTimeout(() => {
                 this.stand();
             }, 2000);
@@ -40,8 +40,8 @@ var PlayerZone = React.createClass({
         const player = this.state.player;
 
         if(this.props.type === 'dealer') {
-            var score = player.stand ? player.getScore() : player.hand[0].value;
-            var cards = player.stand ? player.hand : [player.hand[0]];
+            var score = player.stand ? player.getScore(0) : player.hands[0][0].value;
+            var cards = player.stand ? player.hand : [player.hands[0][0]];
 
             if(score == 1)
                 score = 11;
@@ -57,10 +57,10 @@ var PlayerZone = React.createClass({
         } else {
             return (
                 <div>
-                    <h3>Player's cards ({player.getScore()}) {player.isBusted() ? " - broken !": ""}</h3>
+                    <h3>Player's cards ({player.getScore(0)}) {player.isBusted() ? " - broken !": ""}</h3>
                     <CardHand
                         className="player-cards column"
-                        cards={this.state.player.hand} />
+                        cards={this.state.player.hands[0]} />
                         <div className="player-controls column">
                             <input
                                 type="button"
