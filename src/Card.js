@@ -3,6 +3,13 @@ export const cardFigures = [
     "J", "Q", "K"
 ];
 
+export const cardTypes = [
+    "diamond",
+    "spade",
+    "club",
+    "heart"
+]
+
 /**
  * Card of the deck
  */

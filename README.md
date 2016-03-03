@@ -7,5 +7,5 @@ npm run build
 ## Watch
 npm run watch
 
-## Run
-npm run electron
+## Build & run
+npm run launch

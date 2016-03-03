@@ -1,13 +1,6 @@
 'use strict';
 
-import Card, { cardFigures } from "./Card";
-
-const cardTypes = [
-    "diamond",
-    "spade",
-    "club",
-    "heart"
-]
+import Card, { cardFigures, cardTypes } from "./Card";
 
 /**
  * Deck, containing multiples cards

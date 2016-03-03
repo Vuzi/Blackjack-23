@@ -17,7 +17,7 @@ var PlayerZone = React.createClass({
         game.playerDraw(0);
 
         // Update
-        //this.forceUpdate();
+        this.forceUpdate();
 
         if(player.isBusted()) {
             notification("Broken with " + player.getScore(), "broken");

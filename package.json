@@ -6,6 +6,7 @@
   "scripts": {
     "test": "mocha",
     "js-build": "browserify -vd src/app.js -t [ babelify --presets [ es2015 react ] ] | uglifyjs > app/app.js ",
+    "js-build-dev": "browserify -vd src/app.js -t [ babelify --presets [ es2015 react ] ] > app/app.js ",
     "js-watch": "watchify -vd src/app.js -t [ babelify --presets [ es2015 react ] ] --o app/app.js",
     "build-mac": "electron-packager ./app BlackJack23 --platform=darwin --arch=x64 --version=0.35.6 --overwrite",
     "build-win": "electron-packager ./app BlackJack23 --platform=win32 --arch=x64 --version=0.35.6 --overwrite",
@@ -13,8 +14,9 @@
     "build-all": "electron-packager ./app BlackJack23 --platform=all --arch=x64 --version=0.35.6 --overwrite",
     "watch": "npm run js-watch",
     "build": "npm run js-build",
+    "build-dev": "npm run js-build-dev",
     "package": "npm run build && npm run test && npm run build-all",
-    "launch": "electron app/"
+    "launch": "npm run build-dev && electron app/"
   },
   "repository": {
     "type": "git",
