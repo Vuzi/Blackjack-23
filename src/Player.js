@@ -55,6 +55,19 @@ export default class Player {
         return score ? score : scoreTmp[0] + scoreTmp[1];
     }
 
+    isSplittable(handPosition){
+        if(handPosition>this.hand.length)
+            return false;
+        if(this.hand.length>=2)
+            return false;
+        for(var i = 0; i < this.hand[handPosition].length; i++){
+            if(numberOfElement(this.hand[handPosition], this.hand[handPosition][i].value)>=2){
+                return true;
+            }
+        }
+        return false;
+    }
+
     split(handPosition){
         if(handPosition>this.hand.length)
             return;

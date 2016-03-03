@@ -66,6 +66,19 @@ class Player {
         return this.getScore() > 21;
     }
 
+    isSplittable(handPosition){
+        if(handPosition>this.hand.length)
+            return false;
+        if(this.hand.length>=2)
+            return false;
+        for(var i = 0; i < this.hand[handPosition].length; i++){
+            if(numberOfElement(this.hand[handPosition], this.hand[handPosition][i].value)>=2){
+                return true;
+            }
+        }
+        return false;
+    }
+
     split(handPosition){
         if(handPosition>this.hand.length)
             return;
@@ -147,8 +160,9 @@ describe("splite", function(){
        var card2 = new Card("spade", "10");
        var card3 = new Card("club", "2");
        var card4 = new Card("club", "5");
-       player.hand.push([card1, card2, card3, card4]);
-       player.split(0);
+       player.hand.push([card1, card2, card4]);
+       assert.equal(false, player.isSplittable(0));
+       //player.split(0);
        console.log(player.hand);
    }) ;
 });
