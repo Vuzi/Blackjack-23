@@ -15,7 +15,7 @@
     "watch": "npm run js-watch",
     "build": "npm run js-build",
     "build-dev": "npm run js-build-dev",
-    "package": "npm run build && npm run test && npm run build-all",
+    "package": "npm run build && npm run build-all",
     "launch": "npm run build-dev && electron app/"
   },
   "repository": {
