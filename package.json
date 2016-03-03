@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "main": "main.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --compilers js:babel/register",
     "js-build": "browserify -vd src/app.js -t [ babelify --presets [ es2015 react ] ] | uglifyjs > app/app.js ",
     "js-build-dev": "browserify -vd src/app.js -t [ babelify --presets [ es2015 react ] ] > app/app.js ",
     "js-watch": "watchify -vd src/app.js -t [ babelify --presets [ es2015 react ] ] --o app/app.js",
