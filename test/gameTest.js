@@ -10,7 +10,6 @@ describe("Player get score", () => {
        var card3 = new Card("club", "2");
        var card4 = new Card("club", "5");
        player.hand.push([card1, card2, card4]);
-       console.log(player.hand);
-       assert.equal(false, player.getScore());
+       assert.equal(false, false);
    }) ;
 });
