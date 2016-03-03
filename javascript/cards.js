@@ -12,15 +12,30 @@ const cardFigures = [
 	"J", "Q", "K"
 ]
 
+/**
+ * Card of the deck
+ */
 class Card {
 	constructor(type, figure) {
 		this.type = type;
 		this.figure = figure;
 	}
+
+	get value() {
+        var i = cardFigures.indexOf(this.figure);
+
+	    if(i < 10) // Value
+	        return i + 1;
+	    else // Figure
+	        return 10
+	}
 }
 
+/**
+ * Deck, containing multiples cards
+ */
 class Deck {
-	constructor(type, figure) {
+	constructor() {
 		// Generate each possible card
 		this.cards = cardTypes.reduce((acc, type) => {
 			return acc.concat(cardFigures.map((figure) => {
@@ -30,6 +45,14 @@ class Deck {
 
 		// Shuffle cards
 		this._shuffle();
+	}
+
+	getCard() {
+		return this.cards.pop();
+	}
+
+	hasCards() {
+		return this.cards.length > 0;
 	}
 
 	_shuffle() {

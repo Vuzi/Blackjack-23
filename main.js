@@ -15,7 +15,7 @@ app.on('window-all-closed', function() {
 
 // When ready, start the browser window
 app.on('ready', function() {
-    mainWindow = new BrowserWindow({width: 1000, height: 700});
+    mainWindow = new BrowserWindow({width: 1300, height: 980});
     mainWindow.loadURL('file://' + __dirname + '/index.html');
     mainWindow.toggleDevTools();         
     mainWindow.on('closed', function() {
