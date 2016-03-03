@@ -33,22 +33,13 @@ var BlackjackTable = React.createClass({
         this.forceUpdate();
 
         // Alert the user
-        if(results[0] == "won") {
-            this.state.notifications.push({
-                message: "You won :)",
-                key: "win"
-            });
-        } else if (results[0] == "lost") {
-            this.state.notifications.push({
-                message: "You lost :(",
-                key: "win"
-            });
-        } else {
-            this.state.notifications.push({
-                message: "Equality :S",
-                key: "win"
-            });
-        }
+        if(results[0] == "won")
+            this.notification("You won :)");
+        else if (results[0] == "lost")
+            this.notification("You lost :(");
+        else
+            this.notification("Equality :S");
+
         setTimeout(() => {
             this.state.game.nextTurn();
             this.forceUpdate();
@@ -57,7 +48,7 @@ var BlackjackTable = React.createClass({
 
     render: function() {
         const { game } = this.state;
-        console.log(this.state);
+        
         return (
             <div>
                 <PlayerZone
@@ -73,21 +64,22 @@ var BlackjackTable = React.createClass({
                     onStand={() => this.nextTurn() } />
                 <NotificationStack
                     notifications={this.state.notifications}
-                    onDismiss={notification =>
+                    onDismiss={notification => {
                         this.setState({
-                            notifications: this.state.notifications.filter(n => n !== notification)
+                            notifications: this.state.notifications.filter(n => n.key !== notification.key)
                         })
-                    }
+                    }}
                 />
             </div>
         );
     },
 
-    notification: function (message, key) {
+    notification: function (message) {
         this.state.notifications.push({
             message: message,
-            key: key
+            key: Math.floor((1 + Math.random()) * 0x10000).toString(16)
         });
+        this.forceUpdate();
     },
 
     componentWillMount: function () {

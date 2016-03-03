@@ -12,7 +12,7 @@
 
         <!-- Style -->
         <style type="text/css">
-            #content {
+            #main {
                 padding: 30px;
                 padding-left: 60px;
             }
@@ -40,13 +40,15 @@
             .player-controls input {
                 margin: 5px;
             }
+
+            .notification-bar {
+                font-size: 4rem !important;
+            }
         </style>
     </head>
     <body>
         <div id="main"></div>
         <script type="text/javascript" src="app.js" ></script>
-        <div id="content"></div>
-
         <script>
             // Toggle dev tools on F12
             var remote = require('remote');           

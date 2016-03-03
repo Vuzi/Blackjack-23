@@ -20,7 +20,7 @@ var PlayerZone = React.createClass({
         this.forceUpdate();
 
         if(player.isBusted()) {
-            notification("Broken with " + player.getScore(), "broken");
+            notification("Broken with " + player.getScore());
             setTimeout(() => {
                 this.stand();
             }, 2000);
