@@ -1,28 +1,28 @@
-import React from "react";
+import React, { Component } from "react";
 import PlayerZone from "./PlayerZone";
 import Deck from "./Deck";
 import Player from "./Player";
 import Game from "./Game";
 import { NotificationStack } from 'react-notification';
+import { Container } from "flux/utils";
+import AppStore from "./AppStore";
+import { addNotification, deleteNotification } from "./Actions";
 
-// Blackjack table
-var BlackjackTable = React.createClass({
-    displayName: "BlackjackTable",
-    getInitialState: function() {
-        // New game
-        // Create the game engine
-        const deck = new Deck();
-        const player = new Player(100);
-        const game = new Game(deck, [player]);
-        return {
-            player: player,
-            deck: deck,
-            game : game,
-            notifications: []
-        };
-    },
-    
-    nextTurn: function() {
+class BlackjackTable extends Component {
+    static getStores() {
+        return [AppStore];
+    }
+
+    static calculateState(/*prevState*/) {
+        return AppStore.getState();
+    }
+
+    constructor(props) {
+        super();
+        this.nextTurn = this.nextTurn.bind(this);
+    }
+
+    nextTurn() {
         // Make the dealer draw cards
         this.state.game.dealerDraw();
 
@@ -34,58 +34,44 @@ var BlackjackTable = React.createClass({
 
         // Alert the user
         if(results[0] == "won")
-            this.notification("You won :)");
+            addNotification("You won :)");
         else if (results[0] == "lost")
-            this.notification("You lost :(");
+            addNotification("You lost :(");
         else
-            this.notification("Equality :S");
+            addNotification("Equality :S");
 
         setTimeout(() => {
             this.state.game.nextTurn();
             this.forceUpdate();
         }, 2500);
-    },
+    }
 
-    render: function() {
-        const { game } = this.state;
+    render() {
+        const { game, notifications } = this.state;
+        console.log("BlackjackTable state", this.state);
         
         return (
             <div>
                 <PlayerZone
                     type="dealer"
                     player={game.dealer}
-                    notification={this.notification}
                     game={game} />
                 <PlayerZone
                     type="player"
                     player={game.players[0]}
                     game={game}
-                    notification={this.notification}
                     onStand={() => this.nextTurn() } />
                 <NotificationStack
                     notifications={this.state.notifications}
-                    onDismiss={notification => {
-                        this.setState({
-                            notifications: this.state.notifications.filter(n => n.key !== notification.key)
-                        })
-                    }}
+                    onDismiss={deleteNotification}
                 />
             </div>
         );
-    },
-
-    notification: function (message) {
-        this.state.notifications.push({
-            message: message,
-            key: Math.floor((1 + Math.random()) * 0x10000).toString(16)
-        });
-        this.forceUpdate();
-    },
-
-    componentWillMount: function () {
-        // First turn
-        this.state.game.nextTurn();
     }
-});
 
-export default BlackjackTable;
+    componentWillMount () {
+
+    }
+}
+
+export default Container.create(BlackjackTable);

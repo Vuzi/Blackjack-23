@@ -1,5 +1,6 @@
 import React from "react";
 import CardHand from "./CardHand";
+import { addNotification } from "./Actions";
 
 // Player zone
 var PlayerZone = React.createClass({
@@ -11,7 +12,7 @@ var PlayerZone = React.createClass({
 
     // Ask for a new card
     hit() {
-        let { game, notification } = this.props;
+        let { game } = this.props;
         
         let player = this.state.player;
         game.playerDraw(0);
@@ -20,7 +21,7 @@ var PlayerZone = React.createClass({
         this.forceUpdate();
 
         if(player.isBusted()) {
-            notification("Broken with " + player.getScore());
+            addNotification("Broken with " + player.getScore());
             setTimeout(() => {
                 this.stand();
             }, 2000);
