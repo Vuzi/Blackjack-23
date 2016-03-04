@@ -50,13 +50,13 @@ var BlackjackTable = React.createClass({
         results.forEach(result => {
 
             if(result.state == "won")
-                this.notification("You won (" + result.bet + ")");
+                this.notification("You won (" + result.bet + ")", "success");
             else if (result.state == "lost")
-                this.notification("You lost (" + result.bet + ")");
+                this.notification("You lost (" + result.bet + ")", "error");
             else if (result.state == "blackjack")
-                this.notification("Blackjack ! (" + result.bet + ")");
+                this.notification("Blackjack ! (" + result.bet + ")", "success");
             else
-                this.notification("Equality (" + result.bet + ")");
+                this.notification("Equality (" + result.bet + ")", "info");
         });
 
         setTimeout(() => {
@@ -104,16 +104,23 @@ var BlackjackTable = React.createClass({
                     onClick={() => {
                         window.location.replace("menu.html");
                     }}/>
-                <NotificationSystem ref="notificationSystem" style={false} />
+                <NotificationSystem ref="notificationSystem" style={{
+                  NotificationItem: { // Override the notification item
+                    DefaultStyle: { // Applied to every notification, regardless of the notification level
+                      border : '0',
+                      color : 'none'
+                    }
+                  }
+                }} />
             </div>
         );
     },
 
-    notification(message) {
+    notification(message, level) {
         this.notificationSystem.addNotification({
-            message     : message,
-            level       : 'success',
-            autoDismiss : 3
+            message      : message,
+            level        : level ? level : 'success',
+            dismissAfter : 2000
         });
     },
 

@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Blackjack 23 - Tests</title>
+        <title>Blackjack 23 - Game</title>
         <!-- CSS Reset -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
         <!-- Milligram CSS minified -->
@@ -12,6 +12,94 @@
 
         <!-- Style -->
         <style type="text/css">
+            /* Animations */
+            @keyframes cardAnimation1 {
+                0%   { transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg); }
+                100% { transform: rotateX(0deg) rotateY(0deg)  rotateZ(1.5deg); }
+            }
+
+            @keyframes cardAnimation2 {
+                0%   { transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg); }
+                100% { transform: rotateX(0deg) rotateY(0deg)  rotateZ(-1.5deg); }
+            }
+
+            @keyframes cardAnimation3 {
+                0%   { transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg); }
+                100% { transform: rotateX(0deg) rotateY(0deg)  rotateZ(2deg); }
+            }
+
+            @keyframes cardAnimation4 {
+                0%   { transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg); }
+                100% { transform: rotateX(0deg) rotateY(0deg)  rotateZ(-2deg); }
+            }
+
+            @keyframes cardAnimation5 {
+                0%   { transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg); }
+                100% { transform: rotateX(0deg) rotateY(0deg)  rotateZ(0.5deg); }
+            }
+
+            @keyframes cardAnimation6 {
+                0%   { transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg); }
+                100% { transform: rotateX(0deg) rotateY(0deg)  rotateZ(-0.5deg); }
+            }
+
+            @keyframes bounceOutUp {
+              20% {
+                visibility: visible;
+                -webkit-transform: translate3d(0, -10px, 0);
+                transform: translate3d(0, -10px, 0);
+              }
+
+              40%, 45% {
+                visibility: visible;
+                opacity: 1;
+                -webkit-transform: translate3d(0, 20px, 0);
+                transform: translate3d(0, 20px, 0);
+              }
+
+              to {
+                visibility: hidden;
+                opacity: 0;
+                -webkit-transform: translate3d(0, -2000px, 0);
+                transform: translate3d(0, -2000px, 0);
+              }
+            }
+
+            @keyframes bounceInDown {
+              from, 60%, 75%, 90%, to {
+                -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+                animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+              }
+
+              0% {
+                opacity: 0;
+                -webkit-transform: translate3d(0, -3000px, 0);
+                transform: translate3d(0, -3000px, 0);
+              }
+
+              60% {
+                opacity: 1;
+                -webkit-transform: translate3d(0, 25px, 0);
+                transform: translate3d(0, 25px, 0);
+              }
+
+              75% {
+                -webkit-transform: translate3d(0, -10px, 0);
+                transform: translate3d(0, -10px, 0);
+              }
+
+              90% {
+                -webkit-transform: translate3d(0, 5px, 0);
+                transform: translate3d(0, 5px, 0);
+              }
+
+              to {
+                -webkit-transform: none;
+                transform: none;
+              }
+            }
+
+            /* CSS */
             body {
                 background-image: url("images/cheap_diagonal_fabric.png");
             }
@@ -76,35 +164,6 @@
                 width: 100%;
             }
 
-            @keyframes cardAnimation1 {
-                0%   { transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg); }
-                100% { transform: rotateX(0deg) rotateY(0deg)  rotateZ(1.5deg); }
-            }
-
-            @keyframes cardAnimation2 {
-                0%   { transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg); }
-                100% { transform: rotateX(0deg) rotateY(0deg)  rotateZ(-1.5deg); }
-            }
-
-            @keyframes cardAnimation3 {
-                0%   { transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg); }
-                100% { transform: rotateX(0deg) rotateY(0deg)  rotateZ(2deg); }
-            }
-
-            @keyframes cardAnimation4 {
-                0%   { transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg); }
-                100% { transform: rotateX(0deg) rotateY(0deg)  rotateZ(-2deg); }
-            }
-
-            @keyframes cardAnimation5 {
-                0%   { transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg); }
-                100% { transform: rotateX(0deg) rotateY(0deg)  rotateZ(0.5deg); }
-            }
-
-            @keyframes cardAnimation6 {
-                0%   { transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg); }
-                100% { transform: rotateX(0deg) rotateY(0deg)  rotateZ(-0.5deg); }
-            }
 
             .card {
                 animation-name: cardAnimation3;
@@ -151,7 +210,7 @@
                 right: 0;
             }
 
-            .notification.notification-success {
+            .notification {
                 position: relative;
                 top: 0;
                 right: 0;
@@ -160,14 +219,42 @@
                 padding: 12px;
                 width: 173px;
                 margin: 8px;
+                box-shadow: 0 0 5px 0px gray;
+                border: none;
             }
 
-            .notification.notification-success .notification-dismiss {
+            .notification.notification-success {
+                border-left: 6px solid darkgreen;
+            }
+
+            .notification.notification-error {
+                border-left: 6px solid darkred;
+            }
+
+            .notification.notification-info {
+                border-left: 6px solid lightblue;
+            }
+
+            .notification .notification-dismiss {
                 position: absolute;
                 top: 0;
                 right: 0;
                 margin-right: 10px;
                 display: none;
+            }
+
+            .notification-hidden {
+                /*max-height: 0;
+
+                animation-name: bounceOutUp;
+                animation-duration: 1s;
+                animation-fill-mode: forwards;*/
+                /*display: none;*/
+            }
+
+            .notification-visible {
+               /*animation-name: bounceInDown;
+                animation-duration: 1s;*/
             }
         </style>
     </head>
