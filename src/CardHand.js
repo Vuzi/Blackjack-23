@@ -33,6 +33,19 @@ var CardHand = React.createClass({
         this.props.onStand();
     },
 
+    hasEnoughCredits() {
+        const { player, hand } = this.props;
+        return hand.bet <= player.credits;
+    },
+
+    double() {
+        const { player, hand } = this.props;
+        const currentBet = hand.bet;
+        player.credits = player.credits - currentBet;
+        hand.bet = hand.bet * 2;
+        this.stand();
+    },
+
     render() {
         return this.props.type === 'dealer' ? this.renderDealer() : this.renderPlayer();
     },
@@ -87,6 +100,13 @@ var CardHand = React.createClass({
                             disabled={hand.canHit() && !hand.stand ? "" : "disabled"}
                             value="Hit"
                             onClick={this.hit} />
+                        { (hand.isDoublable() && this.hasEnoughCredits() )
+                        ? <input
+                                type="button"
+                                className="button-outline"
+                                value="Double"
+                                onClick={this.double} />
+                        : null }
                         <input
                             type="button"
                             className="button-outline"
