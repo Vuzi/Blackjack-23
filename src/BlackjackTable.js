@@ -45,13 +45,18 @@ var BlackjackTable = React.createClass({
         this.forceUpdate();
 
         // Alert the user
-        results.forEach((result) => {
-            if(result == "won")
-                this.notification("You won!");
-            else if (result == "lost")
-                this.notification("You lost...");
+
+
+        results.forEach(result => {
+
+            if(result.state == "won")
+                this.notification("You won (" + result.bet + ")");
+            else if (result.state == "lost")
+                this.notification("You lost (" + result.bet + ")");
+            else if (result.state == "blackjack")
+                this.notification("Blackjack ! (" + result.bet + ")");
             else
-                this.notification("Equality");
+                this.notification("Equality (" + result.bet + ")");
         });
 
         setTimeout(() => {
@@ -87,6 +92,18 @@ var BlackjackTable = React.createClass({
                     game={game} player={game.dealer}
                     notification={this.notification} />
                 {playersZone}
+                <input
+                    style={{
+                        position: 'absolute',
+                        bottom: '1px',
+                        left: '15px'
+                    }}
+                    type="button"
+                    className="button-small"
+                    value="Return Menu"
+                    onClick={() => {
+                        window.location.replace("menu.html");
+                    }}/>
                 <NotificationSystem ref="notificationSystem" style={false} />
             </div>
         );
@@ -94,9 +111,9 @@ var BlackjackTable = React.createClass({
 
     notification(message) {
         this.notificationSystem.addNotification({
-            message: message,
-            level: 'success',
-            autoDismiss: 0
+            message     : message,
+            level       : 'success',
+            autoDismiss : 3
         });
     },
 

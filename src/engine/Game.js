@@ -121,16 +121,15 @@ export default class Game {
         let res = this.players.reduce((acc, player) => {
             return player.hands.reduce((acc, hand) => {
                 if(hand.isBusted() || (!this.dealer.hands[0].isBusted() && hand.getScore() < this.dealer.hands[0].getScore())) {
-                    acc.push("lost");
+                    acc.push({ state : "lost", bet : hand.bet });
+                } else if (hand.isBlackJack()) {
+                    acc.push({ state : "blackjack", bet : Math.round(hand.bet * 2.5) });
+                    player.credits += Math.round(hand.bet * 2.5); // Blackjack
                 } else if(this.dealer.hands[0].isBusted() || hand.getScore() > this.dealer.hands[0].getScore()) {
-                    acc.push("won");
-
-                    if(hand.cards.length == 2 && hand.getScore() == 21)
-                        player.credits += Math.round(hand.bet * 2.5); // Blackjack
-                    else
-                        player.credits += hand.bet * 2;
+                    acc.push({ state : "won", bet : hand.bet * 2 });
+                    player.credits += hand.bet * 2;
                 } else {
-                    acc.push("equality");
+                    acc.push({ state : "equality", bet : hand.bet });
                     player.credits += hand.bet;
                 }
                 return acc;
