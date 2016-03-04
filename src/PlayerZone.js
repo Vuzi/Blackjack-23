@@ -88,31 +88,35 @@ var PlayerZone = React.createClass({
         const bet = this.state.bet > player.credits ? player.credits : this.state.bet;
 
         return (
-            <div className="hands">
-                {this.props.type === 'dealer' ? (
-                    <h3>Dealer's cards</h3>
-                ) : (
-                    <h3>Player's cards</h3>
-                )}
-                {this.state.hasBet || this.props.type === 'dealer' ? (
-                    <div className="row">
-                        {hands}
-                    </div>
-                ) : (
-                    <div className="bet">
+            <div>
+                <div className="hands">
+                    {this.props.type === 'dealer' ? (
+                        <h3>Dealer's cards</h3>
+                    ) : (
+                        <h3>Player's cards</h3>
+                    )}
+                    {this.state.hasBet || this.props.type === 'dealer' ? (
                         <div className="row">
-                            <input type="button" className="button-small button-outline" onClick={this.decBet} value="-" />
-                            <input type="text" value={bet} onChange={this.changeBet} />
-                            <input type="button" className="button-small button-outline" onClick={this.incBet} value="+" />
+                            {hands}
                         </div>
-                        <div className="row">
-                            <input type="button" className="button-small button" value="Place bet" onClick={this.validateBet} />
+                    ) : (
+                        <div className="bet">
+                            <div className="row">
+                                <input type="button" className="button-small button-outline" onClick={this.decBet} value="-" />
+                                <input type="text" value={bet} onChange={this.changeBet} />
+                                <input type="button" className="button-small button-outline" onClick={this.incBet} value="+" />
+                            </div>
+                            <div className="row">
+                                <input type="button" className="button-small button" value="Place bet" onClick={this.validateBet} />
+                            </div>
                         </div>
-                    </div>
-                )}
-                <div className="credits">
-                    {player.credits} credit(s)
+                    )}
                 </div>
+                {this.props.type === 'player' ? (
+                    <div className="credits">
+                        {player.credits} credit(s)
+                    </div>
+                ) : null }
             </div>
         );
     }

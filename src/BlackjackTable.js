@@ -94,7 +94,7 @@ var BlackjackTable = React.createClass({
                 {playersZone}
                 <input
                     style={{
-                        position: 'absolute',
+                        position: 'fixed',
                         bottom: '1px',
                         left: '15px'
                     }}

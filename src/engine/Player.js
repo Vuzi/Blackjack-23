@@ -93,14 +93,4 @@ export default class Player {
     hasStand() {
         return this.hands.filter((hand) => !hand.stand).length != 0;
     }
-/*
-    split(hand){
-        handIndex = handIndex === undefined ? 0 : handIndex;
-        
-        if(!hand.isSplittable(handPosition))
-            return false;
-
-        this.hands.push([this.hands[handPosition].pop()]);
-    }
-*/
 }
