@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Blackjack 23 - Tests</title>
+        <!-- CSS Reset -->
+        <link rel="stylesheet" href="stylesheets/normalize.css">
+        <!-- Milligram CSS minified -->
+        <link rel="stylesheet" href="stylesheets/milligram.min.css" />
+        <!-- Google Fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+
+        <!-- Style -->
+        <style type="text/css">
+            #content {
+                padding: 60px;
+                padding-left: 60px;
+            }
+
+            #menu {
+                text-align: center;
+                border: solid #B8B8B8 5px;
+                background-color: #F0F0F0;
+                width:400px;
+                height: 425px;
+                margin-left: auto;
+                margin-right: auto;
+                border-radius: 5px;
+            }
+
+            #fade { /*--Masque opaque noir de fond--*/
+                display: none; /*--masqué par défaut--*/
+                background: #000;
+                position: fixed; left: 0; top: 0;
+                width: 100%; height: 100%;
+                opacity: .80;
+                z-index: 9999;
+            }
+
+            .popup_block{
+                display: none; /*--masqué par défaut--*/
+                background: #fff;
+                padding: 20px;
+                border: 10px solid #ddd;
+                float: left;
+                font-size: 1.2em;
+                position: fixed;
+                top: 50%; left: 50%;
+                z-index: 99999;
+                /*--Les différentes définitions de Box Shadow en CSS3--*/
+                -webkit-box-shadow: 0px 0px 20px #000;
+                -moz-box-shadow: 0px 0px 20px #000;
+                box-shadow: 0px 0px 20px #000;
+                /*--Coins arrondis en CSS3--*/
+                -webkit-border-radius: 10px;
+                -moz-border-radius: 10px;
+                border-radius: 10px;
+            }
+
+            #title h3 {
+                margin-top: 21px;
+            }
+
+            #menu button {
+                width: 190px;
+            }
+
+            img.btn_close {
+                float: right;
+                margin: 0 0 0 0;
+            }
+
+            body {
+                background-image: url("images/background_menu.jpg");
+            }
+        </style>
+    </head>
+    <body>
+        <div id="content"></div>
+        <script>
+            // Toggle dev tools on F12
+            var remote = require('remote');           
+            document.addEventListener("keydown", function (e) {  
+                if (e.keyCode === 123) { // F12
+                    var window = remote.getCurrentWindow();
+                }
+            });
+        </script>
+
+        <div id="menu">
+            <div id="title">
+                <h3>Blackjack 23</h3>
+                <h4>Welcome<h4>
+            </div>
+
+            <!-- Partie normale -->
+            <button onclick="normalGame()">Start a game</button></br></br>
+            <!-- Partie multijoueur -->
+            <button disabled="disabled">Multiplayer Mode</button></br></br>
+            <!-- Mode didactitiel -->
+            <button disabled="disabled">Tutorial Mode</button></br></br>
+
+            <a href="#" data-width="800" data-rel="popup_name" class="poplight">Blackjack's rules</a>
+
+            <div id="popup_name" class="popup_block">
+                <h2>Blackjack's rules</h2>
+                <p>At a casino blackjack table, the player faces the dealer. The players' object is to win money by creating card totals that turn out to be higher than the dealer's hand but do not exceed 21 ("busting"/"breaking"), or alternatively by allowing the dealer to take additional cards until he/she busts.</p>
+                <p> Number cards count as their natural value; the jack, queen, and king (also known as "face cards" or "pictures") count as 10; aces are valued as either 1 or 11 according to the player's choice. If the hand value exceeds 21 points, it busts, and all bets on it are immediately forfeit.</p>
+                <p>After receiving an initial two cards, the player has up to four standard options: "hit", "stand", "double down", or "split" :</p>
+                <ul>
+                    <li>Hit: Take another card from the dealer.</li>
+                    <li>Stand: Take no more cards, also known as "stand pat", "stick", or "stay".</li>
+                    <li>Double down: The player is allowed to increase the initial bet by up to 100% in exchange for committing to stand after receiving exactly one more card.</li>
+                    <li>Split: If the first two cards of a hand have the same value, the player can split them into two hands, by moving a second bet equal to the first into an area outside the betting box.</li>
+                    <li>Insurance: If the dealer's upcard is an ace, the player is offered the option of taking "insurance". If a player take an insurance, if he loses, he pays the half of his original bet.</li>
+                </ul>
+            </div>
+        </div>
+        <!-- JQuery -->
+        <script src="jquery-1.12.1.min.js"></script>
+        <script>
+            window.$ = window.jQuery = require('./jquery-1.12.1.min.js');
+            $( document ).ready(function() {
+                //Lorsque vous cliquez sur un lien de la classe poplight
+                $('a.poplight').on('click', function() {
+                    var popID = $(this).data('rel'); //Trouver la pop-up correspondante
+                    var popWidth = $(this).data('width'); //Trouver la largeur
+
+                    //Faire apparaitre la pop-up et ajouter le bouton de fermeture
+                    $('#' + popID).fadeIn().css({ 'width': popWidth}).prepend('<a href="#" class="close"><img src="images/close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>');
+                    
+                    //Récupération du margin, qui permettra de centrer la fenêtre - on ajuste de 80px en conformité avec le CSS
+                    var popMargTop = ($('#' + popID).height() + 80) / 2;
+                    var popMargLeft = ($('#' + popID).width() + 80) / 2;
+                    
+                    //Apply Margin to Popup
+                    $('#' + popID).css({ 
+                        'margin-top' : -popMargTop,
+                        'margin-left' : -popMargLeft
+                    });
+                    
+                    //Apparition du fond - .css({'filter' : 'alpha(opacity=80)'}) pour corriger les bogues d'anciennes versions de IE
+                    $('body').append('<div id="fade"></div>');
+                    $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn();
+                    
+                    return false;
+                });
+                
+                
+                //Close Popups and Fade Layer
+                $('body').on('click', 'a.close, #fade', function() { //Au clic sur le body...
+                    $('#fade , .popup_block').fadeOut(function() {
+                        $('#fade, a.close').remove();  
+                }); //...ils disparaissent ensemble
+                    
+                    return false;
+                });
+            });
+            function normalGame() {
+                window.location.replace("index.html");
+            }
+        </script>
+    </body>
+</html>

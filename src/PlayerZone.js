@@ -39,6 +39,11 @@ var PlayerZone = React.createClass({
     },
 
     validateBet(e) {
+        let { game, player } = this.props;
+
+        // Place the bet on the first hand
+        game.placeBet(player, player.hands[0], this.state.bet);
+
         this.setState({ hasBet : true });
         this.props.onBet();
     },
@@ -47,7 +52,7 @@ var PlayerZone = React.createClass({
         // Revert : no bet done
         setTimeout(() => {
             this.setState({ hasBet : false });
-        }, 2000);
+        }, 2400);
 
         // Call the previous action
         this.props.onStand();
@@ -58,7 +63,7 @@ var PlayerZone = React.createClass({
 
         // Get all the player hands
         const hands = player.hands.map((hand) => {
-            return (
+            return ( 
                 <CardHand
                     className="player-cards column"
                     {...this.props}
@@ -69,8 +74,12 @@ var PlayerZone = React.createClass({
         });
 
         return (
-            <div>
-                <h3>Player's cards</h3>
+            <div className="hands">
+                {this.props.type === 'dealer' ? (
+                    <h3>Dealer's cards</h3>
+                ) : (
+                    <h3>Player's cards</h3>
+                )}
                 {this.state.hasBet || this.props.type === 'dealer' ? (
                     <div>
                         {hands}
@@ -87,6 +96,9 @@ var PlayerZone = React.createClass({
                         </div>
                     </div>
                 )}
+                <div className="credits">
+                    {player.credits} credit(s)
+                </div>
             </div>
         );
     }

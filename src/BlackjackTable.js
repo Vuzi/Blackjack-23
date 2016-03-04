@@ -15,7 +15,7 @@ var BlackjackTable = React.createClass({
         // New game
         // Create the game engine
         return {
-            game : new Game(new Deck(), [new Player(100)]),
+            game : new Game(new Deck(6), [new Player(100)]),
             notifications: []
         };
     },

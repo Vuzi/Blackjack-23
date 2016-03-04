@@ -21,10 +21,12 @@ export default class Game {
         this.players.forEach((player) => {
             // Reset hand
             player.hands = [ new PlayerHand() ];
+            player.stand = false;
         });
 
         // Reset dealer
         this.dealer.hands = [ new PlayerHand() ];
+        this.dealer.stand = false;
     }
 
     /**
@@ -32,7 +34,7 @@ export default class Game {
      * in the player's hand, and be less or equals to the remaining credits of the player.
      */
     placeBet(player, hand, amount) {
-        if(amount < 0 || amount > player.credits || !hand.hasCard())
+        if(amount < 0 || amount > player.credits || hand.hasCard())
             return false;
 
         hand.bet = amount;
@@ -95,7 +97,11 @@ export default class Game {
                     acc.push("lost");
                 } else if(this.dealer.hands[0].isBusted() || hand.getScore() > this.dealer.hands[0].getScore()) {
                     acc.push("won");
-                    player.credits += hand.bet * 2;
+
+                    if(hand.cards.length == 2 && hand.getScore() == 21)
+                        player.credits += Math.round(hand.bet * 2.5); // Blackjack
+                    else
+                        player.credits += hand.bet * 2;
                 } else {
                     acc.push("equality");
                     player.credits += hand.bet;
