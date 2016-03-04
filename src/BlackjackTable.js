@@ -44,12 +44,14 @@ var BlackjackTable = React.createClass({
         this.forceUpdate();
 
         // Alert the user
-        if(results[0] == "won")
-            this.notification("You won :)");
-        else if (results[0] == "lost")
-            this.notification("You lost :(");
-        else
-            this.notification("Equality :S");
+        results.forEach((result) => {
+            if(result == "won")
+                this.notification("You won!");
+            else if (result == "lost")
+                this.notification("You lost...");
+            else
+                this.notification("Equality");
+        });
 
         setTimeout(() => {
             this.state.game.nextTurn();
@@ -67,7 +69,8 @@ var BlackjackTable = React.createClass({
                     game={game} player={player}
                     notification={this.notification}
                     onBet={this.onBet}
-                    onStand={this.nextTurn} />
+                    onStand={this.nextTurn}
+                    onSplit={this.forceUpdate} />
                 );
         });
         

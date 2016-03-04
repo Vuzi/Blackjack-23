@@ -1,6 +1,7 @@
 'use strict';
 
 import Player, { PlayerHand } from "./Player";
+import Card, { cardFigures, cardTypes } from "./Card";
 
 /**
  * Game engine
@@ -66,6 +67,25 @@ export default class Game {
         hand.addCard(this.deck.getCard());
         if (hand.isBusted())
             hand.stand = true;
+    }
+
+    /**
+     * Split the specified player hand
+     */
+    playerSplit(player, hand) {
+        if(hand.isSplittable() && player.credits >= hand.bet) {
+            // Create the hand
+            let newHand = hand.split();
+
+            // Set the credits
+            player.credits -= hand.bet;
+            newHand.bet = hand.bet;
+
+            // Add the end
+            player.hands.push(newHand);
+        }
+
+        console.log(player.hands)
     }
 
     /**

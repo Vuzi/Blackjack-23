@@ -23,6 +23,15 @@ var CardHand = React.createClass({
         }
     },
 
+    split() {
+        const { game, player, hand } = this.props;
+
+        game.playerSplit(player, hand);
+
+        // Callback
+        this.props.onSplit();
+    },
+
     // Pass
     stand() {
         let hand = this.props.hand;
@@ -57,7 +66,7 @@ var CardHand = React.createClass({
         }
 
         return (
-            <div className="hand">
+            <div className="hand column">
                 <div className="cards">
                     {cardImages}
                     {score > 0 ? (<h3 className="cardScore">{score}</h3>) : null}
@@ -74,7 +83,7 @@ var CardHand = React.createClass({
         );
 
         return (
-            <div className="hand">
+            <div className="hand column">
                 <div className="cards">
                     {cardImages}
                     {hand.getScore() > 0 ? (<h3 className="cardScore">{hand.getScore()}</h3>) : null}
@@ -93,6 +102,16 @@ var CardHand = React.createClass({
                             disabled={!hand.stand ? "" : "disabled"}
                             value="Stand"
                             onClick={this.stand}/>
+
+                    { hand.isSplittable() && hand.bet <= player.credits ?
+                        (<input
+                            type="button"
+                            disabled={!hand.stand ? "" : "disabled"}
+                            className="button-outline"
+                            value="Split"
+                            onClick={this.split}/>)
+                    : null }
+
                     </div>
                 </div>
             </div>

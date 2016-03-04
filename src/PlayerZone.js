@@ -49,13 +49,24 @@ var PlayerZone = React.createClass({
     },
 
     onStand() {
-        // Revert : no bet done
-        setTimeout(() => {
-            this.setState({ hasBet : false });
-        }, 2400);
+        let player = this.props.player;
 
-        // Call the previous action
-        this.props.onStand();
+        // If everybody has stand
+        if(player.hands.filter((hand) => !hand.stand).length == 0) {
+            // Revert : no bet done
+            setTimeout(() => {
+                this.setState({ hasBet : false });
+            }, 2400);
+
+            // Call the previous action
+            this.props.onStand();
+        } else
+            this.forceUpdate(); // Only update the current hand
+    },
+
+    onSplit() {
+        // Update the view
+        this.forceUpdate();
     },
     
     render: function() {
@@ -65,9 +76,9 @@ var PlayerZone = React.createClass({
         const hands = player.hands.map((hand) => {
             return ( 
                 <CardHand
-                    className="player-cards column"
                     {...this.props}
                     onStand={this.onStand}
+                    onSplit={this.onSplit}
                     hand={hand}
                 />
             );
@@ -81,7 +92,7 @@ var PlayerZone = React.createClass({
                     <h3>Player's cards</h3>
                 )}
                 {this.state.hasBet || this.props.type === 'dealer' ? (
-                    <div>
+                    <div className="row">
                         {hands}
                     </div>
                 ) : (

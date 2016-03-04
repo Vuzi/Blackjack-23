@@ -56,6 +56,16 @@ export class PlayerHand {
     isBusted() {
         return this.getScore(0) > 21;
     }
+
+    split() {
+        if(this.isSplittable()) {
+            let newHand = new PlayerHand();
+            newHand.addCard(this.cards.pop());
+            return newHand;
+        }
+
+        return null; // Nothing to split
+    }
 }
 
 /**
