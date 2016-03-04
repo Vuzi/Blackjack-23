@@ -115,13 +115,12 @@ export default class Game {
             return player.hands.reduce((acc, hand) => {
                 if(hand.isBusted() || (!this.dealer.hands[0].isBusted() && hand.getScore() < this.dealer.hands[0].getScore())) {
                     acc.push("lost");
+                } else if (hand.isBlackJack()) {
+                    acc.push("blackjack");
+                    player.credits += Math.round(hand.bet * 2.5); // Blackjack
                 } else if(this.dealer.hands[0].isBusted() || hand.getScore() > this.dealer.hands[0].getScore()) {
                     acc.push("won");
-
-                    if(hand.cards.length == 2 && hand.getScore() == 21)
-                        player.credits += Math.round(hand.bet * 2.5); // Blackjack
-                    else
-                        player.credits += hand.bet * 2;
+                    player.credits += hand.bet * 2;
                 } else {
                     acc.push("equality");
                     player.credits += hand.bet;

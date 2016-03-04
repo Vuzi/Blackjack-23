@@ -42,6 +42,10 @@ export class PlayerHand {
         return score ? score : scoreTmp[0] + scoreTmp[1];
     }
 
+    isBlackJack() {
+        return (this.cards.length == 2) && (this.getScore() == 21);
+    }
+
     isDoublable() {
         return this.cards.length === 2;
     }

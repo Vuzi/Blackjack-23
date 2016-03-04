@@ -44,13 +44,18 @@ var BlackjackTable = React.createClass({
         this.forceUpdate();
 
         // Alert the user
-        results.forEach((result) => {
+
+
+        results.forEach(result => {
+
             if(result == "won")
-                this.notification("You won!");
+                this.notification("You won :)");
             else if (result == "lost")
-                this.notification("You lost...");
+                this.notification("You lost :(");
+            else if (result == "blackjack")
+                this.notification("BlackJack");
             else
-                this.notification("Equality");
+                this.notification("Equality :S");
         });
 
         setTimeout(() => {
