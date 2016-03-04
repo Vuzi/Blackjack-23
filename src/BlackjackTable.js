@@ -1,5 +1,6 @@
 import React from "react";
-import { NotificationStack } from 'react-notification';
+//import { NotificationStack } from 'react-notification';
+import NotificationSystem from "react-notification-system";
 
 import Deck from "./engine/Deck";
 import Player from "./engine/Player";
@@ -59,6 +60,10 @@ var BlackjackTable = React.createClass({
         }, 2500);
     },
 
+    componentDidMount: function() {
+        this.notificationSystem = this.refs.notificationSystem;
+    },
+
     render() {
         const { game } = this.state;
 
@@ -82,24 +87,17 @@ var BlackjackTable = React.createClass({
                     game={game} player={game.dealer}
                     notification={this.notification} />
                 {playersZone}
-                <NotificationStack
-                    notifications={this.state.notifications}
-                    onDismiss={notification => {
-                        this.setState({
-                            notifications: this.state.notifications.filter(n => n.key !== notification.key)
-                        })
-                    }}
-                />
+                <NotificationSystem ref="notificationSystem" style={false} />
             </div>
         );
     },
 
     notification(message) {
-        this.state.notifications.push({
+        this.notificationSystem.addNotification({
             message: message,
-            key: Math.floor((1 + Math.random()) * 0x10000).toString(16)
+            level: 'success',
+            autoDismiss: 0
         });
-        this.forceUpdate();
     },
 
     componentWillMount() {

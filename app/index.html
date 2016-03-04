@@ -145,8 +145,29 @@
                 z-index: -1;
             }
 
-            .notification-bar {
-                font-size: 4rem !important;
+            .notifications-wrapper {
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+
+            .notification.notification-success {
+                position: relative;
+                top: 0;
+                right: 0;
+                background-image: url('images/wild_oliva.png');
+                color: whitesmoke;
+                padding: 12px;
+                width: 173px;
+                margin: 8px;
+            }
+
+            .notification.notification-success .notification-dismiss {
+                position: absolute;
+                top: 0;
+                right: 0;
+                margin-right: 10px;
+                display: none;
             }
         </style>
     </head>

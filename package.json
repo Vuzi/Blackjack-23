@@ -36,5 +36,8 @@
     "react-notification": "^4.2.0",
     "uglifyjs": "^2.4.10",
     "watchify": "^3.7.0"
+  },
+  "dependencies": {
+    "react-notification-system": "^0.2.6"
   }
 }
