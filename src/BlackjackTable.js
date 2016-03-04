@@ -87,6 +87,18 @@ var BlackjackTable = React.createClass({
                     game={game} player={game.dealer}
                     notification={this.notification} />
                 {playersZone}
+                <input
+                    style={{
+                        position: 'absolute',
+                        bottom: '1px',
+                        left: '15px'
+                    }}
+                    type="button"
+                    className="button-small"
+                    value="Return Menu"
+                    onClick={() => {
+                        window.location.replace("menu.html");
+                    }}/>
                 <NotificationStack
                     notifications={this.state.notifications}
                     onDismiss={notification => {
