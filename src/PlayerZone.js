@@ -62,9 +62,10 @@ var PlayerZone = React.createClass({
         const {game, player} = this.props;
 
         // Get all the player hands
-        const hands = player.hands.map((hand) => {
+        const hands = player.hands.map((hand, i) => {
             return ( 
                 <CardHand
+                    key={i}
                     className="player-cards column"
                     {...this.props}
                     onStand={this.onStand}

@@ -60,9 +60,10 @@ var BlackjackTable = React.createClass({
     render() {
         const { game } = this.state;
 
-        let playersZone = game.players.map((player) => {
+        let playersZone = game.players.map((player, i) => {
             return (
                 <PlayerZone
+                    key={i}
                     type="player"
                     game={game} player={player}
                     notification={this.notification}
