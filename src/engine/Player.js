@@ -43,7 +43,7 @@ export class PlayerHand {
     }
 
     isDoublable() {
-        this.cards.length === 2;
+        return this.cards.length === 2;
     }
 
     isSplittable() {
