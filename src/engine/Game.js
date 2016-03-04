@@ -52,14 +52,8 @@ export default class Game {
         // For every player
         this.players.forEach((player) => {
             // Give 2 cards
-            //for(var i = 0; i < 2; i++)
-            //    player.hands[0].addCard(this.deck.getCard());
-
-            var card = this.deck.getCard();
-            var card2 = new Card(card.type, card.figure, i++)
-
-            player.hands[0].addCard(card);
-            player.hands[0].addCard(card2);
+            for(var i = 0; i < 2; i++)
+                player.hands[0].addCard(this.deck.getCard());
         });
 
         // Give 2 cards
