@@ -14,9 +14,10 @@ export const cardTypes = [
  * Card of the deck
  */
 export default class Card {
-    constructor(type, figure) {
+    constructor(type, figure, id) {
         this.type = type;
         this.figure = figure;
+        this.id = id;
     }
 
     get value() {

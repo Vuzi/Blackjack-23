@@ -1,28 +1,39 @@
 import React from "react";
-import PlayerZone from "./PlayerZone";
-import Deck from "./Deck";
-import Player from "./Player";
-import Game from "./Game";
 import { NotificationStack } from 'react-notification';
+
+import Deck from "./engine/Deck";
+import Player from "./engine/Player";
+import Game from "./engine/Game";
+
+import PlayerZone from "./PlayerZone";
 
 // Blackjack table
 var BlackjackTable = React.createClass({
     displayName: "BlackjackTable",
-    getInitialState: function() {
+
+    getInitialState() {
         // New game
         // Create the game engine
-        const deck = new Deck();
-        const player = new Player(100);
-        const game = new Game(deck, [player]);
         return {
-            player: player,
-            deck: deck,
-            game : game,
+            game : new Game(new Deck(6), [new Player(100)]),
             notifications: []
         };
     },
     
-    nextTurn: function() {
+    onBet() {
+        // When multiple player, check that everybody has made a bet
+        this.startTurn();
+    },
+
+    startTurn() {
+        // Give cards
+        this.state.game.initalDraw();
+
+        // Refresh
+        this.forceUpdate();
+    },
+
+    nextTurn() {
         // Make the dealer draw cards
         this.state.game.dealerDraw();
 
@@ -46,22 +57,27 @@ var BlackjackTable = React.createClass({
         }, 2500);
     },
 
-    render: function() {
+    render() {
         const { game } = this.state;
+
+        let playersZone = game.players.map((player) => {
+            return (
+                <PlayerZone
+                    type="player"
+                    game={game} player={player}
+                    notification={this.notification}
+                    onBet={this.onBet}
+                    onStand={this.nextTurn} />
+                );
+        });
         
         return (
             <div>
                 <PlayerZone
                     type="dealer"
-                    player={game.dealer}
-                    notification={this.notification}
-                    game={game} />
-                <PlayerZone
-                    type="player"
-                    player={game.players[0]}
-                    game={game}
-                    notification={this.notification}
-                    onStand={() => this.nextTurn() } />
+                    game={game} player={game.dealer}
+                    notification={this.notification} />
+                {playersZone}
                 <NotificationStack
                     notifications={this.state.notifications}
                     onDismiss={notification => {
@@ -74,7 +90,7 @@ var BlackjackTable = React.createClass({
         );
     },
 
-    notification: function (message) {
+    notification(message) {
         this.state.notifications.push({
             message: message,
             key: Math.floor((1 + Math.random()) * 0x10000).toString(16)
@@ -82,7 +98,7 @@ var BlackjackTable = React.createClass({
         this.forceUpdate();
     },
 
-    componentWillMount: function () {
+    componentWillMount() {
         // First turn
         this.state.game.nextTurn();
     }

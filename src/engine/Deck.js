@@ -6,22 +6,35 @@ import Card, { cardFigures, cardTypes } from "./Card";
  * Deck, containing multiples cards
  */
 export default class Deck {
-    constructor() {
-        // Generate each possible card
-        this.cards = cardTypes.reduce((acc, type) => {
-            return acc.concat(cardFigures.map(figure => new Card(type, figure)));
-        }, []);
+    constructor(size) {
+        this.size = size;
+        this.cardNextId = 1;
 
-        // Shuffle cards
-        this._shuffle();
+        this._refill();
     }
 
     getCard() {
+        if(!this.hasCards())
+            this._refill();
+
         return this.cards.pop();
     }
 
     hasCards() {
         return this.cards.length > 0;
+    }
+
+    _refill() {
+        this.cards = [];
+
+        // Generate each possible card
+        for(var i = 0; i < this.size; i++)
+            this.cards = this.cards.concat(cardTypes.reduce((acc, type) => {
+                return acc.concat(cardFigures.map(figure => new Card(type, figure, this.cardNextId++)));
+            }, []));
+
+        // Shuffle cards
+        this._shuffle();
     }
 
     _shuffle() {
