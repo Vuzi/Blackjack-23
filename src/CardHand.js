@@ -34,7 +34,7 @@ var CardHand = React.createClass({
 
     // Pass
     stand() {
-        let hand = this.props.hand;
+        const { hand } = this.props;
 
         hand.stand = true;
 
