@@ -48,9 +48,10 @@ var CardHand = React.createClass({
     },
 
     double() {
-        const { player, hand } = this.props;
+        const { game, player, hand } = this.props;
         const currentBet = hand.bet;
         player.credits = player.credits - currentBet;
+        game.playerDraw(player, hand);
         hand.bet = hand.bet * 2;
         this.stand();
     },
