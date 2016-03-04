@@ -85,7 +85,8 @@ var PlayerZone = React.createClass({
             );
         });
 
-        const bet = this.state.bet > player.credits ? player.credits : this.state.bet;
+        // Check bet value
+        this.state.bet = this.state.bet > player.credits ? player.credits : this.state.bet;
 
         return (
             <div>
@@ -103,7 +104,7 @@ var PlayerZone = React.createClass({
                         <div className="bet">
                             <div className="row">
                                 <input type="button" className="button-small button-outline" onClick={this.decBet} value="-" />
-                                <input type="text" value={bet} onChange={this.changeBet} />
+                                <input type="text" value={this.state.bet} onChange={this.changeBet} />
                                 <input type="button" className="button-small button-outline" onClick={this.incBet} value="+" />
                             </div>
                             <div className="row">
