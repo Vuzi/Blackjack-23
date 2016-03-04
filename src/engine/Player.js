@@ -42,6 +42,10 @@ export class PlayerHand {
         return score ? score : scoreTmp[0] + scoreTmp[1];
     }
 
+    isDoublable() {
+        return this.cards.length === 2;
+    }
+
     isSplittable() {
         if(this.cards.length != 2)
             return false;
