@@ -1,4 +1,4 @@
-# Blackjack-23
+# Blackjack 23
 Blackjack app in Electron
 
 ## Build
